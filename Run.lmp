@@ -1,0 +1,38 @@
+# Run down
+timestep	0.001
+fix 5 tool move linear 0 -5 0 units box
+thermo_style	custom step atoms temp epair etotal press v_fx v_fy v_fz v_press3 vol ke pe density ebond enthalpy epair pxx pyy pzz pxy pxz pyz edihed eimp elong elapsed elaplong fmax fnorm 
+thermo		500
+thermo_modify	temp new
+thermo_modify lost ignore
+dump 1 all custom 500 CMP.*.dump id type x y z vx vy vz fx fy fz c_10 c_11 c_peratom[1] c_peratom[2] c_peratom[3] c_peratom[4] c_peratom[5] c_peratom[6]  
+run		6000 
+unfix 5 
+undump 1
+
+# Run 
+timestep	0.001
+velocity slab set -1.0 0 0.0 sum no units box
+fix 11 tool move rotate -132 0 0 0 1 0 3.14 units box  
+thermo_style	custom step atoms temp epair etotal press v_fx v_fy v_fz v_press3 vol ke pe density ebond enthalpy epair pxx pyy pzz pxy pxz pyz edihed eimp elong elapsed elaplong fmax fnorm 
+thermo		1000
+thermo_modify	temp new
+thermo_modify lost ignore
+dump 2 all custom 1000 CMP.*.dump id type x y z vx vy vz fx fy fz c_10 c_11 c_peratom[1] c_peratom[2] c_peratom[3] c_peratom[4] c_peratom[5] c_peratom[6]  
+run	  110000 
+unfix 11
+undump 2
+
+
+# Run up
+timestep	0.001
+fix 81 tool move linear 0 5 0 units box 
+thermo_style	custom step atoms temp epair etotal press v_fx v_fy v_fz v_press3 vol ke pe density ebond enthalpy epair pxx pyy pzz pxy pxz pyz edihed eimp elong elapsed elaplong fmax fnorm 
+thermo		500
+thermo_modify	temp new
+thermo_modify lost ignore
+dump 11 all custom 500 CMP.*.dump id type x y z vx vy vz fx fy fz c_10 c_11 c_peratom[1] c_peratom[2] c_peratom[3] c_peratom[4] 
+run		6000 
+unfix 81
+undump 11
+
